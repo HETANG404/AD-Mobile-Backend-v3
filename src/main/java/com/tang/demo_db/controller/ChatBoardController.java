@@ -35,4 +35,15 @@ public class ChatBoardController {
                     .body("Error processing request: " + e.getMessage());
         }
     }
+
+    @PostMapping("/top-five")  // Changed from /top5 to /top-five for clarity
+    public ResponseEntity<?> processQueryTopFive(@RequestBody String userQuery) {
+        try {
+            ResponseEntity<String> apiResponse = externalApiService.getRecommendations(userQuery);
+            return restaurantService.processApiResponseAndGetTop(apiResponse.getBody(), 5);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error processing request: " + e.getMessage());
+        }
+    }
 }
